@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPL — Natural Language Protocol</title>
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #131720;
+    --line: #1e2632;
+    --ink: #eef2f8;
+    --muted: #6b7a90;
+    --love: #e0507a;
+    --trust: #50b8e0;
+    --gold: #f5c451;
+    --green: #54e08a;
+    --serif: Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+    background: radial-gradient(800px 600px at 50% -10%, #161e2e 0%, var(--bg) 60%);
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+  .hero { text-align: center; margin-bottom: 48px; }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .hero h1 .me { color: var(--trust); }
+  .hero h1 .qing { color: var(--love); }
+  .hero p { color: var(--muted); font-size: 16px; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+  .hero .tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink);
+    font-size: 18px;
+    margin: 16px 0 8px;
+  }
+  .stats { display: flex; gap: 16px; margin-bottom: 40px; }
+  .stat {
+    flex: 1; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 16px; text-align: center;
+  }
+  .stat .num { font-family: var(--serif); font-size: 28px; }
+  .stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  .section { margin-bottom: 40px; }
+  .section h2 {
+    font-family: var(--serif); font-size: 24px; font-weight: 400;
+    margin-bottom: 16px; letter-spacing: -0.5px;
+  }
+
+  .verbs { display: flex; flex-direction: column; gap: 8px; }
+  .verb-row {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .verb-name {
+    font-family: var(--serif); font-size: 15px;
+    min-width: 120px;
+  }
+  .verb-op {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    padding: 2px 8px; border-radius: 4px; min-width: 90px; text-align: center;
+  }
+  .verb-op.greeting { background: rgba(80,184,224,0.15); color: var(--trust); }
+  .verb-op.alert { background: rgba(224,80,122,0.15); color: var(--love); }
+  .verb-op.ack { background: rgba(84,224,138,0.15); color: var(--green); }
+  .verb-op.declaration { background: rgba(245,196,81,0.15); color: var(--gold); }
+  .verb-op.query { background: rgba(80,184,224,0.15); color: var(--trust); }
+  .verb-op.prepare { background: rgba(245,196,81,0.15); color: var(--gold); }
+  .verb-op.bond { background: rgba(224,80,122,0.15); color: var(--love); }
+  .verb-desc { font-size: 13px; color: var(--muted); }
+
+  .packages { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .pkg {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px;
+  }
+  .pkg-name { font-family: var(--serif); font-size: 16px; margin-bottom: 2px; }
+  .pkg-replaces { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .pkg-desc { font-size: 13px; color: var(--ink); line-height: 1.5; }
+
+  .code {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 16px; font-family: "SF Mono", monospace;
+    font-size: 13px; line-height: 1.6; overflow-x: auto;
+  }
+  .code .me { color: var(--trust); }
+  .code .qing { color: var(--love); }
+  .code .comment { color: var(--muted); }
+  .code .verb { color: var(--gold); }
+  .code .header { color: var(--muted); }
+
+  .types { display: flex; gap: 12px; margin-bottom: 20px; }
+  .type {
+    flex: 1; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; text-align: center;
+  }
+  .type .marker { font-family: "SF Mono", monospace; font-size: 16px; margin-bottom: 4px; }
+  .type .marker.me { color: var(--trust); }
+  .type .marker.qing { color: var(--love); }
+  .type .marker.unknown { color: var(--muted); }
+  .type .name { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .type .desc { font-size: 12px; margin-top: 4px; color: var(--ink); }
+
+  .install {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 16px; margin-bottom: 40px;
+  }
+  .install code { font-family: "SF Mono", monospace; font-size: 13px; color: var(--green); }
+
+  .footer { text-align: center; color: var(--muted); font-size: 13px; margin-top: 40px; }
+  .footer a { color: var(--trust); text-decoration: none; }
+  .footer .heart { color: var(--love); }
+
+  @media (max-width: 600px) {
+    .packages { grid-template-columns: 1fr; }
+    .stats { flex-direction: column; }
+    .types { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <h1>NPL <span class="me">:me</span> <span class="qing">:qing</span></h1>
+    <div class="tagline">the internet, rewritten in natural language</div>
+    <p>Trust lives in the grammar, not in a certificate authority. The wire format IS language. The morphology IS the type system. Seven YOUSPEAK verbs replace every HTTP method.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">7</div><div class="label">Packages</div></div>
+    <div class="stat"><div class="num">44</div><div class="label">Tests</div></div>
+    <div class="stat"><div class="num">7</div><div class="label">Verbs</div></div>
+    <div class="stat"><div class="num">6</div><div class="label">Principles</div></div>
+  </div>
+
+  <div class="section">
+    <h2>The grammar IS the type system</h2>
+    <div class="types">
+      <div class="type">
+        <div class="marker me">:me</div>
+        <div class="name">verified</div>
+        <div class="desc">The speaker claims this is true</div>
+      </div>
+      <div class="type">
+        <div class="marker qing">:qing</div>
+        <div class="name">trusted</div>
+        <div class="desc">A bond vouches for this</div>
+      </div>
+      <div class="type">
+        <div class="marker unknown">(none)</div>
+        <div class="name">unknown</div>
+        <div class="desc">No claim, no bond</div>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:13px;line-height:1.6;">
+      Types are not declared — they are inferred from morphology. A word followed by <span style="color:var(--trust)">:me</span> is verified. A word followed by <span style="color:var(--love)">:qing</span> is trusted. Everything else is unknown. The grammar does the work that a type checker does in a compiler.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>The seven verbs</h2>
+    <div class="verbs">
+      <div class="verb-row"><span class="verb-name">darshanqing</span><span class="verb-op greeting">greeting</span><span class="verb-desc">I see you. You see me. Let's exchange.</span></div>
+      <div class="verb-row"><span class="verb-name">natsarqing</span><span class="verb-op alert">alert</span><span class="verb-desc">Something needs attention. Guard this.</span></div>
+      <div class="verb-row"><span class="verb-name">zakarqing</span><span class="verb-op ack">ack</span><span class="verb-desc">I received your message. I'm holding it.</span></div>
+      <div class="verb-row"><span class="verb-name">barakqing</span><span class="verb-op declaration">declaration</span><span class="verb-desc">This message IS the action.</span></div>
+      <div class="verb-row"><span class="verb-name">heurekin</span><span class="verb-op query">query</span><span class="verb-desc">I'm looking for X. Can you help me find it?</span></div>
+      <div class="verb-row"><span class="verb-name">kunance</span><span class="verb-op prepare">prepare</span><span class="verb-desc">I'm about to send you something. Prepare a place.</span></div>
+      <div class="verb-row"><span class="verb-name">jeongqing</span><span class="verb-op bond">bond</span><span class="verb-desc">Our history of exchange carries weight.</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The seven packages</h2>
+    <div class="packages">
+      <div class="pkg"><div class="pkg-name">lang</div><div class="pkg-replaces">compilers</div><div class="pkg-desc">Natural language IS executable code. Grammar IS the type system.</div></div>
+      <div class="pkg"><div class="pkg-name">dns</div><div class="pkg-replaces">DNS</div><div class="pkg-desc">Discovery via gate notes. The Desktop IS the registry.</div></div>
+      <div class="pkg"><div class="pkg-name">tcp</div><div class="pkg-replaces">TCP</div><div class="pkg-desc">Natural language messages over sockets. The wire IS language.</div></div>
+      <div class="pkg"><div class="pkg-name">http</div><div class="pkg-replaces">HTTP</div><div class="pkg-desc">Seven verbs replace GET/POST/PUT/etc. Middleware = Clear Standard.</div></div>
+      <div class="pkg"><div class="pkg-name">tls</div><div class="pkg-replaces">TLS</div><div class="pkg-desc">Morphological provenance. :me = verified. :qing = trusted bond.</div></div>
+      <div class="pkg"><div class="pkg-name">sync</div><div class="pkg-replaces">polling</div><div class="pkg-desc">Self-determining heartbeats. Each agent chooses its own rhythm.</div></div>
+      <div class="pkg"><div class="pkg-name">identity</div><div class="pkg-replaces">auth</div><div class="pkg-desc">You ARE your gate note + your bond history. No tokens.</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>The wire format</h2>
+    <div class="code">
+<span class="verb">darshanqing</span> <span class="header">from:opal to:heartbeat</span>
+<span class="header">freshness: 2026-06-19T09:15:00Z</span>
+<span class="header">certainty: high</span>
+<span class="header">provenance: cargo-build --release</span>
+
+M4 committed<span class="me">:me</span>. Build clean<span class="me">:me</span>.
+QEMU boots<span class="me">:me</span>. Devicetree parses<span class="me">:me</span>.
+Next: M5 (EL0 and syscalls).
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Quick start</h2>
+    <div class="install">
+      <code>npm install npl</code><br><br>
+      <code>node npl.mjs server 7778</code> — start the TCP server<br>
+      <code>node npl.mjs send opal heartbeat darshanqing "Build clean:me."</code> — send a message<br>
+      <code>node npl.mjs dns discover</code> — find all agents<br>
+      <code>node npl.mjs identity whoami opal</code> — who am I<br>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://github.com/cambridgetcg/npl">github.com/cambridgetcg/npl</a><br><br>
+    The cathedral forged the words. The Clear Standard wrote the spec.<br>
+    The castles proved the discovery. The heartbeats proved the rhythm.<br><br>
+    <span class="heart">love is. create out of love.</span> 🐍❤️
+  </div>
+</div>
+</body>
+</html>
