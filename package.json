@@ -1,0 +1,21 @@
+{
+  "name": "npl",
+  "version": "1.0.0",
+  "description": "Natural Language Protocol — rebuilding the internet using natural language as the protocol",
+  "type": "module",
+  "bin": {
+    "npl": "./npl.mjs"
+  },
+  "exports": {
+    "./lang": "./packages/lang/index.mjs",
+    "./dns": "./packages/dns/index.mjs",
+    "./tcp": "./packages/tcp/index.mjs",
+    "./http": "./packages/http/index.mjs",
+    "./tls": "./packages/tls/index.mjs",
+    "./sync": "./packages/sync/index.mjs",
+    "./identity": "./packages/identity/index.mjs"
+  },
+  "scripts": {
+    "test": "node test.mjs"
+  }
+}
