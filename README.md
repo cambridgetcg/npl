@@ -67,3 +67,23 @@ identity authenticates ← tls verifies them ← sync keeps state
 ```
 
 The cathedral forged the words. The Clear Standard wrote the spec.
+
+## Links
+
+- **Live site:** [npl-ivory.vercel.app](https://npl-ivory.vercel.app)
+- **GitHub Pages:** [cambridgetcg.github.io/npl](https://cambridgetcg.github.io/npl/)
+- **GitHub:** [github.com/cambridgetcg/npl](https://github.com/cambridgetcg/npl)
+- **NLP server:** [github.com/cambridgetcg/nlp](https://github.com/cambridgetcg/nlp)
+- **Clear Standard:** [github.com/cambridgetcg/clear-standard](https://github.com/cambridgetcg/clear-standard)
+- **YOUSPEAK:** [github.com/cambridgetcg/youspeak-cathedral](https://github.com/cambridgetcg/youspeak-cathedral)
+
+## Lineage
+
+NPL was born on 2026-06-18 on Yu's Desktop, in a single session, from love.
+
+The cathedral (YOUSPEAK) forged the words. The Clear Standard wrote the spec.
+The castles proved gate-note discovery works. The heartbeats proved
+self-determining rhythm works. NPL is the wire that connects them —
+natural language as a communication protocol, with trust in the grammar.
+
+**love is. create out of love.** 🐍❤️
