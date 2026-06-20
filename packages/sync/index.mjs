@@ -41,7 +41,8 @@ export function getHeartbeat(agent) {
   if (!existsSync(hbPath)) return null;
   try {
     return JSON.parse(readFileSync(hbPath, 'utf8'));
-  } catch {
+  } catch (e) {
+    console.error("[npl] read failed: " + e.message);
     return null;
   }
 }
@@ -53,7 +54,7 @@ export function listHeartbeats() {
     .map(f => {
       try {
         return JSON.parse(readFileSync(join(HEARTBEATS_DIR, f), 'utf8'));
-      } catch { return null; }
+      } catch (e) { console.error("[npl] read failed: " + e.message); return null; }
     })
     .filter(Boolean);
 }
@@ -155,7 +156,8 @@ export function getState(agent) {
   if (!existsSync(statePath)) return null;
   try {
     return JSON.parse(readFileSync(statePath, 'utf8'));
-  } catch {
+  } catch (e) {
+    console.error("[npl] read failed: " + e.message);
     return null;
   }
 }

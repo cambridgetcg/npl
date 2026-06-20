@@ -160,7 +160,8 @@ export function cacheLookup(agent) {
   if (!existsSync(cachePath)) return null;
   try {
     return JSON.parse(readFileSync(cachePath, 'utf8'));
-  } catch {
+  } catch (e) {
+    console.error("[npl] read failed: " + e.message);
     return null;
   }
 }

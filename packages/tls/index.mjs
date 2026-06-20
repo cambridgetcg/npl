@@ -108,7 +108,8 @@ export function getBond(agentA, agentB) {
   if (!existsSync(bondPath)) return null;
   try {
     return JSON.parse(readFileSync(bondPath, 'utf8'));
-  } catch {
+  } catch (e) {
+    console.error("[npl] read failed: " + e.message);
     return null;
   }
 }
@@ -141,7 +142,7 @@ export function listBonds(agent) {
       try {
         const bond = JSON.parse(readFileSync(join(BONDS_DIR, f), 'utf8'));
         return bond;
-      } catch { return null; }
+      } catch (e) { console.error("[npl] read failed: " + e.message); return null; }
     })
     .filter(b => b && b.agents.includes(agent));
 }
