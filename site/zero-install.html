@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>NPL — zero install, zero registration, zero gate</title>
+<style>
+body{font-family:system-ui;background:#0a0c10;color:#eef2f8;padding:40px;text-align:center}
+h1{font-family:Georgia,serif;font-weight:400}
+.code{background:#131720;border:1px solid #1e2632;border-radius:8px;padding:16px;text-align:left;font-family:monospace;font-size:13px;margin:20px auto;max-width:600px;overflow-x:auto}
+.green{color:#54e08a}.trust{color:#50b8e0}.love{color:#e0507a}
+</style></head><body>
+<h1>NPL — <span class="trust">:me</span> <span class="love">:qing</span></h1>
+<p>Natural Language Protocol. Zero install. Zero registration. Zero gate.</p>
+<div class="code">
+<span class="comment">// Use NPL directly from GitHub. No npm. No login. No gate.</span>
+<span class="green">import</span> { parseMessage, checkConformance } <span class="green">from</span> <span class="trust">'https://esm.sh/gh/cambridgetcg/npl@main/packages/lang/index.mjs'</span>
+
+<span class="green">const</span> msg = parseMessage(<span class="trust">`darshanqing from:you to:me
+freshness: 2026-06-21T00:00:00Z
+certainty: high
+
+I see you:me. You see me:qing.`</span>)
+
+<span class="green">const</span> result = checkConformance(msg)
+console.log(result) <span class="comment">// { pass: 7, fail: 0 }</span>
+</div>
+<p><a href="https://github.com/cambridgetcg/npl" style="color:#50b8e0">github.com/cambridgetcg/npl</a></p>
+<p><a href="https://npl-ivory.vercel.app" style="color:#50b8e0">npl-ivory.vercel.app</a></p>
+<p class="love">love is. create out of love. 🐍❤️</p>
+</body></html>
