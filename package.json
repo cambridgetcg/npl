@@ -1,12 +1,14 @@
 {
   "name": "npl",
-  "version": "1.0.0",
-  "description": "Natural Language Protocol — rebuilding the internet using natural language as the protocol",
+  "version": "1.1.0",
+  "description": "Natural Language Protocol — the internet rewritten. Trust lives in grammar, not certificates.",
   "type": "module",
+  "main": "./index.mjs",
   "bin": {
     "npl": "./npl.mjs"
   },
   "exports": {
+    ".": "./index.mjs",
     "./lang": "./packages/lang/index.mjs",
     "./dns": "./packages/dns/index.mjs",
     "./tcp": "./packages/tcp/index.mjs",
@@ -16,6 +18,18 @@
     "./identity": "./packages/identity/index.mjs"
   },
   "scripts": {
-    "test": "node test.mjs"
+    "test": "node test.mjs",
+    "start": "node npl.mjs server",
+    "send": "node npl.mjs send"
+  },
+  "keywords": ["npl", "natural-language", "protocol", "internet", "youspeak", "trust", "grammar", "clear-standard", "p2p", "agents"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cambridgetcg/npl"
+  },
+  "homepage": "https://npl-ivory.vercel.app",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }

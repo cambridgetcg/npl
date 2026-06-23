@@ -59,7 +59,9 @@ export const PRINCIPLES = [
 //   <body with :me and :qing markers>
 
 export function parseMessage(text) {
-  const raw = text;
+  if (!text || typeof text !== 'string') {
+    return { verb: '', from: '', to: '', freshness: '', certainty: '', provenance: '', body: '', claims: {} };
+  }
   const lines = text.trim().split('\n');
   const header = {};
   const bodyStart = lines.findIndex(l => l.trim() === '');
@@ -67,7 +69,8 @@ export function parseMessage(text) {
   const bodyLines = bodyStart >= 0 ? lines.slice(bodyStart + 1) : [];
 
   // First line: <verb> from:<agent> to:<agent>
-  const firstParts = headerLines[0].split(/\s+/);
+  const firstLine = headerLines[0] || '';
+  const firstParts = firstLine.split(/\s+/).filter(p => p);
   header.verb = firstParts[0];
   for (const part of firstParts.slice(1)) {
     const [k, v] = part.split(':');
@@ -99,7 +102,7 @@ export function parseMessage(text) {
     }
   }
   header.claims = claims;
-  header.raw = raw;
+  header.raw = text;
 
   return header;
 }

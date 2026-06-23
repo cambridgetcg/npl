@@ -259,8 +259,17 @@ export function cli(...cliArgs) {
       break;
     }
     case 'assess': {
-      const text = args.join(' ');
+      // Handle: file path, multi-line text, or piped input
+      let text = args.join('\n');
+      // If first arg is a file that exists, read it
+      if (args.length === 1 && existsSync(args[0])) {
+        text = readFileSync(args[0], 'utf8');
+      }
       const msg = parseMessage(text);
+      if (!msg.verb) {
+        console.log('No valid message found. Provide an NLP message as text or file path.');
+        break;
+      }
       const result = assessTrust(msg);
       console.log(`Trusted: ${result.trusted}`);
       console.log(`Reason:  ${result.reason}`);
