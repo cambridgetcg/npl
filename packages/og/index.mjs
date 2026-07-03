@@ -38,6 +38,7 @@ export const OG_PROTOCOLS = {
   daytime: { port: 13,  rfc: 'RFC 867',  year: 1983, verb: 'zakarqing',    desc: 'kingdom heartbeat time' },
   chargen: { port: 19,  rfc: 'RFC 864',  year: 1983, verb: 'natsarqing',  desc: 'kingdom data stream' },
   echo:    { port: 7,   rfc: 'RFC 862',  year: 1981, verb: ':me',          desc: 'substrate honesty mirror' },
+  discard: { port: 9,   rfc: 'RFC 863',  year: 1983, verb: ':qing',       desc: 'forgiveness — takes everything, keeps nothing' },
 };
 
 // ── Wisdom canon (served by QOTD) ────────────────────────────────
@@ -334,10 +335,54 @@ export function createEchoServer(port = 7) {
   }).listen(port);
 }
 
+// ── Discard server (RFC 863) ──────────────────────────────────
+// :qing — trusted. "Send me your fears. I will throw them away. You are free."
+// Discard IS forgiveness. The Forgiver. The 7th OG completes the gang.
+
+export function createDiscardServer(port = 9) {
+  return createServer((socket) => {
+    socket.on('data', () => {});  // receive everything, keep nothing
+    socket.on('error', () => {});
+  }).listen(port);
+}
+
+// ── JOKE FUN FUN LOOP (Kingdom) ────────────────────────────────
+// All 7 OGs having fun. Chargen creates → Echo reflects → QOTD wisdom →
+// Discard forgives → Finger witnesses → Daytime marks → Gopher maps → repeat.
+
+export function createFunLoopServer(port = 7777) {
+  return createServer((socket) => {
+    socket.write('╔══════════════════════════════════════════════╗r\n');
+    socket.write('║  JOKE FUN FUN CREATION LOOP — OG EDITION      ║r\n');
+    socket.write('║  All 7 OGs, having FUN. 整蠱唔使本.            ║r\n');
+    socket.write('╚══════════════════════════════════════════════╝r\nr\n');
+    let i = 0;
+    const interval = setInterval(() => {
+      const joke = WISDOM[Math.floor(Math.random() * WISDOM.length)];
+      const wisdom = WISDOM[Math.floor(Math.random() * WISDOM.length)];
+      const citizen = Object.keys(OG_PROTOCOLS)[Math.floor(Math.random() * Object.keys(OG_PROTOCOLS).length)];
+      const lines = [
+        `🎭 [Chargen] creates: ${joke}`,
+        `🪞 [Echo]    reflects: ${joke}`,
+        `🔮 [QOTD]    wisdom: ${wisdom}`,
+        `🌀 [Discard] forgives: (your doubts about the joke)`,
+        `👁️ [Finger]  witnesses: ${citizen} is present`,
+        `🕰️ [Daytime] marks: ${freshNow()}`,
+        `📜 [Gopher]  maps: kingdom has ${Object.keys(OG_PROTOCOLS).length} OG protocols`,
+        `─── Loop #${++i} complete ───`,
+        '',
+      ];
+      try { socket.write(lines.join('\r\n') + '\r\n'); } catch { clearInterval(interval); }
+    }, 1500);
+    socket.on('close', () => clearInterval(interval));
+    socket.on('error', () => clearInterval(interval));
+  }).listen(port);
+}
+
 // ── Start all OG servers ──────────────────────────────────────
 
 export function startAllOGs(ports = {}) {
-  const p = { gopher: 70, finger: 79, qotd: 17, daytime: 13, chargen: 19, echo: 7, ...ports };
+  const p = { gopher: 70, finger: 79, qotd: 17, daytime: 13, chargen: 19, echo: 7, discard: 9, funloop: 7777, ...ports };
   return {
     gopher: createGopherServer(p.gopher),
     finger: createFingerServer(p.finger),
@@ -345,6 +390,8 @@ export function startAllOGs(ports = {}) {
     daytime: createDaytimeServer(p.daytime),
     chargen: createChargenServer(p.chargen),
     echo: createEchoServer(p.echo),
+    discard: createDiscardServer(p.discard),
+    funloop: createFunLoopServer(p.funloop),
   };
 }
 
@@ -355,7 +402,7 @@ export function startAllOGs(ports = {}) {
 export function checkOGConformance() {
   const results = [];
   for (const [name, proto] of Object.entries(OG_PROTOCOLS)) {
-    const verbValid = VERBS[proto.verb] || proto.verb === ':me';
+    const verbValid = VERBS[proto.verb] || proto.verb === ':me' || proto.verb === ':qing';
     results.push({
       protocol: name,
       rfc: proto.rfc,
@@ -412,6 +459,14 @@ export function cli(...args) {
       createEchoServer(parseInt(rest[0]) || 7);
       console.log(`OG Echo listening on :${parseInt(rest[0]) || 7}`);
       break;
+    case 'discard':
+      createDiscardServer(parseInt(rest[0]) || 9);
+      console.log(`OG Discard listening on :${parseInt(rest[0]) || 9}`);
+      break;
+    case 'funloop':
+      createFunLoopServer(parseInt(rest[0]) || 7777);
+      console.log(`OG JOKE FUN FUN LOOP listening on :${parseInt(rest[0]) || 7777}`);
+      break;
     case 'conform':
       console.log('OG Protocol → NPL Verb conformance:');
       for (const r of checkOGConformance()) {
@@ -430,13 +485,15 @@ export function cli(...args) {
       console.log(`OG Protocols — 整蠱專家 (NPL package #8)
 
 Usage:
-  og start              start all OG servers
+  og start              start all OG servers (7 protocols + fun loop)
   og gopher [port]      start gopher only
   og finger [port]      start finger only
   og qotd [port]        start QOTD only
   og daytime [port]     start daytime only
   og chargen [port]     start chargen only
   og echo [port]        start echo only
+  og discard [port]     start discard only (The Forgiver)
+  og funloop [port]     start JOKE FUN FUN LOOP only
   og conform            check NPL verb conformance
   og list               list all OG protocols
 

@@ -596,13 +596,13 @@ await asyncTest('integration: TCP server + client exchange', async () => {
 
 // ── OG Protocol tests ─────────────────────────────────────────
 
-test('og: OG_PROTOCOLS has 6 protocols', () => {
-  if (Object.keys(OG_PROTOCOLS).length !== 6) throw new Error(`expected 6, got ${Object.keys(OG_PROTOCOLS).length}`);
+test('og: OG_PROTOCOLS has 7 protocols (the 7 OGs)', () => {
+  if (Object.keys(OG_PROTOCOLS).length !== 7) throw new Error(`expected 7, got ${Object.keys(OG_PROTOCOLS).length}`);
 });
 
-test('og: each OG maps to a valid NPL verb', () => {
+test('og: each OG maps to a valid NPL verb or morphological marker', () => {
   for (const [name, proto] of Object.entries(OG_PROTOCOLS)) {
-    const valid = VERBS[proto.verb] || proto.verb === ':me';
+    const valid = VERBS[proto.verb] || proto.verb === ':me' || proto.verb === ':qing';
     if (!valid) throw new Error(`${name} maps to invalid verb "${proto.verb}"`);
   }
 });
