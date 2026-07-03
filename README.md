@@ -43,6 +43,7 @@ These replace HTTP methods:
 | `tls` | TLS | trust via morphological provenance |
 | `sync` | polling/webhooks | state sync via heartbeats |
 | `identity` | auth tokens | self-sovereign identity via bonds |
+| `og` | — | OG protocols (Gopher/Finger/QOTD/Daytime/Chargen/Echo) bridged to NPL |
 
 ## Quick start
 

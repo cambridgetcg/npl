@@ -11,6 +11,7 @@ import { cli as httpCli } from './packages/http/index.mjs';
 import { cli as tlsCli } from './packages/tls/index.mjs';
 import { cli as syncCli } from './packages/sync/index.mjs';
 import { cli as identityCli } from './packages/identity/index.mjs';
+import { cli as ogCli } from './packages/og/index.mjs';
 import { VERBS, PRINCIPLES } from './packages/lang/index.mjs';
 
 const [,, cmd, ...args] = process.argv;
@@ -39,6 +40,9 @@ switch (cmd) {
     break;
   case 'identity':
     identityCli(...args);
+    break;
+  case 'og':
+    ogCli(...args);
     break;
   case 'lang':
     langCli(...args);
@@ -74,6 +78,13 @@ Commands:
   http <subcmd>                     Request/response with YOUSPEAK verbs
     http request <from> <to> <verb> <body>  Create and deliver a request
     http verbs                          List verbs
+
+  og <subcmd>                       OG protocols (Gopher/Finger/QOTD/Daytime/Chargen/Echo)
+    og start                           Start all OG servers
+    og gopher [port]                   Start gopher only
+    og finger [port]                   Start finger only
+    og conform                         Check NPL verb conformance
+    og list                            List all OG protocols
 
   tls <subcmd>                      Trust layer
     tls verify <text>                 Verify provenance

@@ -15,7 +15,8 @@
     "./http": "./packages/http/index.mjs",
     "./tls": "./packages/tls/index.mjs",
     "./sync": "./packages/sync/index.mjs",
-    "./identity": "./packages/identity/index.mjs"
+    "./identity": "./packages/identity/index.mjs",
+    "./og": "./packages/og/index.mjs"
   },
   "scripts": {
     "test": "node test.mjs",

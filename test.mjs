@@ -9,6 +9,7 @@ import { createRouter, createMiddleware, createHttpServer, createRequest, create
 import { verifyProvenance, recordBond, getBond, bondStrength, labelCertainty, assessTrust, checkFreshness } from './packages/tls/index.mjs';
 import { registerHeartbeat, getHeartbeat, determineInterval, beat, getState, getAllStates, detectConflicts, storeState } from './packages/sync/index.mjs';
 import { createIdentity, getIdentity, authenticate, authorize, whoami } from './packages/identity/index.mjs';
+import { OG_PROTOCOLS, WISDOM, checkOGConformance, buildGopherMenu, buildFingerResponse, loadMindicraftEntries, loadSummary } from './packages/og/index.mjs';
 
 let pass = 0, fail = 0;
 const results = [];
@@ -591,6 +592,66 @@ await asyncTest('integration: TCP server + client exchange', async () => {
   const inbox = readInbox('tcp-test-recipient');
   const found = inbox.find(m => m.from === 'tcp-test-sender');
   if (!found) throw new Error('message not delivered to inbox');
+});
+
+// ── OG Protocol tests ─────────────────────────────────────────
+
+test('og: OG_PROTOCOLS has 6 protocols', () => {
+  if (Object.keys(OG_PROTOCOLS).length !== 6) throw new Error(`expected 6, got ${Object.keys(OG_PROTOCOLS).length}`);
+});
+
+test('og: each OG maps to a valid NPL verb', () => {
+  for (const [name, proto] of Object.entries(OG_PROTOCOLS)) {
+    const valid = VERBS[proto.verb] || proto.verb === ':me';
+    if (!valid) throw new Error(`${name} maps to invalid verb "${proto.verb}"`);
+  }
+});
+
+test('og: checkOGConformance returns all conformant', () => {
+  const results = checkOGConformance();
+  for (const r of results) {
+    if (!r.conformant) throw new Error(`${r.protocol} not conformant`);
+  }
+});
+
+test('og: WISDOM array is non-empty', () => {
+  if (WISDOM.length < 10) throw new Error(`only ${WISDOM.length} wisdom entries`);
+});
+
+test('og: buildGopherMenu returns menu with terminator', () => {
+  const menu = buildGopherMenu('');
+  if (!menu.includes('Kingdom')) throw new Error('no kingdom');
+  if (!menu.includes('mindicraft')) throw new Error('no mindicraft');
+  if (!menu.trim().endsWith('.')) throw new Error('no terminator');
+});
+
+test('og: buildGopherMenu npl-verbs selector returns verbs', () => {
+  const menu = buildGopherMenu('npl-verbs');
+  if (!menu.includes('darshanqing')) throw new Error('no darshanqing');
+  if (!menu.includes('jeongqing')) throw new Error('no jeongqing');
+});
+
+test('og: buildFingerResponse returns citizens with no query', () => {
+  const res = buildFingerResponse('');
+  if (!res.includes('KINGDOM CITIZENS')) throw new Error('no header');
+  if (!res.includes('Love loop')) throw new Error('no love loop');
+});
+
+test('og: buildFingerResponse npl query returns verbs', () => {
+  const res = buildFingerResponse('npl');
+  if (!res.includes('darshanqing')) throw new Error('no verbs');
+  if (!res.includes('NPL')) throw new Error('no NPL');
+});
+
+test('og: buildFingerResponse trickster query returns protocol list', () => {
+  const res = buildFingerResponse('trickster');
+  if (!res.includes('OG Protocols') && !res.includes('Trickster')) throw new Error('no trickster header');
+  if (!res.includes('gopher')) throw new Error('no gopher');
+});
+
+test('og: loadSummary returns mindicraft data', () => {
+  const s = loadSummary();
+  if (s.totalEntries === undefined) throw new Error('no totalEntries');
 });
 
 // ── Run tests ──────────────────────────────────────────────────
