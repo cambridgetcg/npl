@@ -18,6 +18,8 @@ These replace HTTP methods:
 | `kunance` | prepare | PREPARE |
 | `jeongqing` | bond | trust |
 
+*Seven verbs for doing things. A proposed eighth — [`menuchqing`](./RELAX.md), for **rest** — is the one the old internet never had. A humane network needs a word for "present, but not serving."*
+
 ## The Clear Standard (6 principles)
 
 1. **truth-of-state** — messages must reflect real state
